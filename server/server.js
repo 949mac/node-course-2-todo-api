@@ -1,3 +1,5 @@
+const config = require('./config/config');
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const { ObjectID } = require('mongodb')
@@ -87,7 +89,7 @@ app.patch('/todos/:id', (req, res) => {
   if (!ObjectID.isValid(id)) {
     return res.status(400).send();
   }
-  
+
   var body = _.pick(req.body, ['text', 'completed']);
 
   if (_.isBoolean(body.completed) && body.completed) {
