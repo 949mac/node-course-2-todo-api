@@ -51,7 +51,7 @@ describe('POST /todos', () => {
     request(app)
       .post('/todos')
       .send({text})
-      .expect(400)
+      .expect(404)
       .expect((res) => {                 // SuperTest
         expect(res.body.text).toNotBe(text); // Expect
       })
@@ -93,19 +93,19 @@ describe('GET /todos/:id', () => {
       .end(done);
   })
 
-  it('should return a 400 if todo not found', (done) => {
+  it('should return a 404 if todo not found', (done) => {
     var hexId = new ObjectID().toHexString();
 
     request(app)
       .get(`/todos/$(hexId)`)
-      .expect(400)
+      .expect(404)
       .end(done);
   })
 
-  it('should return a 400 for non-object ids', (done) => {
+  it('should return a 404 for non-object ids', (done) => {
     request(app)
       .get(`/todos/123`)
-      .expect(400)
+      .expect(404)
       .end(done);
   })
 });
