@@ -34,20 +34,12 @@ const users = [{
 {
   _id: userObj2,
   email: 'ben@boon.com',
-  password: 'slambam123',
-  tokens:[{
-    access: 'auth',
-    token: jwt.sign({_id: userObj2, access}, 'abc123').toString()
-  }]
+  password: 'slambam123'
 },
 {
   _id: userObj3,
   email: 'cat@chin.com',
-  password: 'wook123',
-  tokens:[{
-    access: 'auth',
-    token: jwt.sign({_id: userObj3, access}, 'abc123').toString()
-  }]
+  password: 'wook123'
 }];
 
 const populateTodos = (done) => {
@@ -58,7 +50,7 @@ const populateTodos = (done) => {
 
 const populateUsers = (done) => {
     User.remove({}).then( () => {
-      // return User.insertMany(users); // skips middleware 
+      // return User.insertMany(users); // skips middleware
       var user1 = new User(users[0]).save();
       var user2 = new User(users[1]).save();
       var user3 = new User(users[2]).save();

@@ -221,7 +221,7 @@ describe('POST /users', () => {
           expect(user).toExist();
           expect(user.password).toNotBe(body.password);
           done();
-        });
+        }).catch((e) => done(e));
       });
   });
 
@@ -249,3 +249,54 @@ describe('POST /users', () => {
       .end(done);
   });
 });
+
+describe('POST /users/login', (param) => {
+  var body = { email: users[1].email , password: users[1].password };
+  it('should login user and return auth token', (done) => {
+    request(app)
+      .post('/users/login')
+      .send(body)
+      .expect(200)
+      .expect((res) => {                 // SuperTest
+        expect(res.headers['x-auth']).toExist();
+        expect(res.body._id).toExist(); // Expect
+        expect(res.body.email).toBe(body.email); // Expect
+      })
+      .end( (err, res) => {
+        if (err) {
+          return done(err);
+        }
+
+        User.findById(users[1]._id).then((user) => {
+          expect(user.tokens[0]).toInclude({
+            access: 'auth',
+            token: res.headers['x-auth']
+          });
+          done();
+        }).catch((e) => done(e));
+      });
+  });
+
+  it('should reject invalid login', (done) => {
+    var body = { email: users[1].email , password: "obviousBADpass" };
+    request(app)
+      .post('/users/login')
+      .send(body)
+      .expect(403)
+      .expect((res) => {                 // SuperTest
+        expect(res.headers['x-auth']).toNotExist();
+        expect(res.body).toEqual({}); // Expect
+      })
+      .end( (err, res) => {
+        if (err) {
+          return done(err);
+        }
+
+        User.findById(users[1]._id).then((user) => {
+          expect(user.tokens.length).toBe(0);
+          done();
+        }).catch((e) => done(e));
+      });
+
+  })
+})
