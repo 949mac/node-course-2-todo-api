@@ -1,3 +1,4 @@
+# This is the require section
 require('./config/config');
 
 const express = require('express');
@@ -30,6 +31,10 @@ app.post('/todos', authenticate, (req, res) => {
 
 });
 
+/*
+ * Hello there
+ *
+*/
 
 app.get('/todos', authenticate, (req, res) => {
   // var todo = new Todo();
